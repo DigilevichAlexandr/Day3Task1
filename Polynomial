@@ -1,0 +1,144 @@
+using System;
+using System.Text.RegularExpressions;
+
+namespace ASP.NET.Digilevich.DAY3.TASK1Project
+{
+    public sealed class Polynomial : ICloneable, IEquatable<Polynomial>
+    {
+        string _polinom;
+        int[] _koefitsenties;
+
+        public Polynomial(Polynomial p)
+        {
+            this._koefitsenties = p._koefitsenties;
+            this._polinom = p._polinom;
+        }
+
+        public Polynomial(int[] arrk)
+        {
+            _koefitsenties = arrk;
+            _polinom = "";
+            for (int i = arrk.Length - 1; i >= 0; i--)
+            {
+                if (arrk[i] != 0)
+                    _polinom += arrk[i].ToString();
+            }
+        }
+
+        public Polynomial(string p)
+        {
+            _polinom = p;
+            if (p[0] != '-')
+                p = "+" + p;
+            int n = 0;
+            Regex rxd = new Regex(@"[a-zA-Z]\^[0-9]+");
+            Match tegxd = rxd.Match(p);
+            if (tegxd.Value != "") // many
+            {
+                n = 1 + int.Parse(tegxd.Value.Remove(0, 2));
+                _koefitsenties = new int[n];
+                for (int i = 0; i > n; i--)
+                {
+                    _koefitsenties[i] = 0;
+                }
+                Regex r = new Regex(@"[-+][0-9]+?[a-zA-Z]\^[0-9]+");
+                Match t = r.Match(p);
+                int ind = 0;
+                while (t.Success)
+                {
+                    ind = int.Parse((new Regex(@"\^[0-9]+")).Match(t.Value).Value.Remove(0, 1));
+                    Regex rtemp = new Regex(@"[0-9]+[a-zA-Z]");
+                    Match ttemp = rtemp.Match(t.Value);
+                    if (ttemp.Value == "")
+                        _koefitsenties[ind] = 1;
+                    else
+                        _koefitsenties[ind] = int.Parse(ttemp.Value.Remove(ttemp.Value.Length - 1));
+                    t = t.NextMatch();
+                }
+                Regex r_1 = new Regex(@"[-+][0-9]+[a-zA-Z][-+]");
+                Match t_1 = r_1.Match(p);
+                if (t_1.Success)
+                    _koefitsenties[1] = int.Parse(t_1.Value.Remove(t_1.Value.Length - 2));
+                Regex r_0 = new Regex(@"[-+][0-9]+\z");
+                Match t_0 = r_0.Match(p);
+                if (t_0.Success)
+                    _koefitsenties[0] = int.Parse(t_0.Value);
+
+            }
+            else // last prelast?
+            {
+                Match tegx = (new Regex(@"[-+][0-9]+?[a-zA-Z]")).Match(p);
+                if (tegx.Value != "")
+                {
+                    _koefitsenties = new int[2];
+                    Regex r = new Regex(@"[0-9]+");
+                    _koefitsenties[1] = int.Parse(tegx.Value[0] + r.Match(tegx.Value).Value == "" ? "1" : r.Match(tegx.Value).Value);
+                    Match teg = (new Regex(@"[-+]?[0-9]+\z")).Match(p);
+                    if (teg.Success)
+                        _koefitsenties[0] = int.Parse(teg.Value);
+                    else
+                        _koefitsenties[0] = 0;
+                }
+                else // last
+                {
+                    _koefitsenties = new int[1];
+                    Match teg = (new Regex(@"[-+]?[0-9]+")).Match(p);
+                    _koefitsenties[0] = int.Parse(teg.Value == "" ? "0" : teg.Value);
+                }
+            }
+        }
+
+        public int[] GetArrayOfKoefitsenties()
+        {
+            return _koefitsenties;
+        }
+
+        public override string ToString()
+        {
+            return _polinom;
+        }
+
+
+        public object Clone()
+        {
+            return new Polynomial(this);
+        }
+
+        public static Polynomial operator +(Polynomial a, Polynomial b)
+        {
+            int la = a.GetArrayOfKoefitsenties().Length, lb = b.GetArrayOfKoefitsenties().Length;
+            int[] res = new int[la > lb ? la : lb];
+            int[] arra = a.GetArrayOfKoefitsenties(), arrb = b.GetArrayOfKoefitsenties();
+            for (int i = 0; i < res.Length; i++)
+                res[i] = arra[i] + arrb[i];
+            return new Polynomial(res);
+        }
+
+        public static Polynomial operator -(Polynomial a, Polynomial b)
+        {
+            int la = a.GetArrayOfKoefitsenties().Length, lb = b.GetArrayOfKoefitsenties().Length;
+            int[] res = new int[la > lb ? la : lb];
+            int[] arra = a.GetArrayOfKoefitsenties(), arrb = b.GetArrayOfKoefitsenties();
+            for (int i = 0; i < res.Length; i++)
+                res[i] = arra[i] - arrb[i];
+            return new Polynomial(res);
+        }
+
+        public static Polynomial operator *(Polynomial a, int b)
+        {
+            int la = a.GetArrayOfKoefitsenties().Length;
+            int[] res = new int[la];
+            int[] arra = a.GetArrayOfKoefitsenties();
+            for (int i = 0; i < la; i++)
+                res[i] = arra[i] * b;
+            return new Polynomial(res);
+        }
+
+
+
+        public bool Equals(Polynomial other)
+        {
+            return this._polinom == other.ToString();
+        }
+    }
+}
