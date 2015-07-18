@@ -1,0 +1,32 @@
+using System;
+
+namespace ASP.NET.Digilevich.DAY3.TASK1Project
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Polynomial p1 = new Polynomial("23x^2+3X-4");
+            Console.WriteLine(p1);
+            Polynomial p2 = new Polynomial("3X-4");
+            Console.WriteLine(p2);
+            Polynomial p3 = new Polynomial("4");
+            Console.WriteLine(p3);
+            Polynomial p4 = new Polynomial("23x^2-4");
+            Console.WriteLine(p4);
+            Polynomial p5 = new Polynomial("23x^2");
+            Console.WriteLine(p5);
+            Polynomial p6 = new Polynomial("23x");
+            Console.WriteLine(p6);
+            int[] arrint = p1.GetArrayOfKoefitsenties();
+            Polynomial pe = new Polynomial("23x^2+3X-4");
+            Console.WriteLine(p1.Equals(pe));
+            
+
+            
+
+
+Console.Read();
+        }
+    }
+}
