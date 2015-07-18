@@ -1,0 +1,16 @@
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ASP.NET.Digilevich.DAY3.TASK1Project;
+
+namespace ASP.NET.Digilevich.DAY3.TASK1
+{
+    [TestClass]
+    public class PolynomialTest
+    {
+        [TestMethod]
+        public void ConstrArr_ThreeMem_()
+        {
+            Assert.AreEqual(new int[]{-4,3,23},(new Polynomial("23x^2+3X-4")).GetArrayOfKoefitsenties());
+        }
+    }
+}
