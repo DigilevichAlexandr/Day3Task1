@@ -1,6 +1,6 @@
 using System;
 
-namespace ASP.NET.Digilevich.DAY3.TASK1Project
+namespace Day3Task1
 {
     class Program
     {
