@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace ASP.NET.Digilevich.DAY3.TASK1Project
+namespace Day3Task1
 {
     public sealed class Polynomial : ICloneable, IEquatable<Polynomial>
     {
@@ -134,11 +134,18 @@ namespace ASP.NET.Digilevich.DAY3.TASK1Project
             return new Polynomial(res);
         }
 
-
-
         public bool Equals(Polynomial other)
         {
             return this._polinom == other.ToString();
+        }
+        
+        /// <summary>
+        /// хешкод дается согласно степени многочлена
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _koefitsenties[_koefitsenties.Length-1];
         }
     }
 }
